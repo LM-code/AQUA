@@ -1,25 +1,36 @@
 # include <stdio.h>
+# include <stdlib.h>
 # include <math.h>
 # include <gtk/gtk.h>
-int main (int argc,char **argv){
+typedef struct {
+	GtkWidget *p_Liste_reg;
+	GtkWidget *p_Liste_duree;
+	GtkWidget *p_Resultat;
+} donnee;
+
+void Calcul (GtkWidget *p_Fenetre,gpointer p_data);
+int main (int argc,char *argv[]){
+   donnee form = {NULL,NULL,NULL};
    // widget GTK
-      GtkWidget *pFenetre = NULL;
-      GtkWidget *pCadre[2];
+      GtkWidget *p_Fenetre = NULL;
+      GtkWidget *p_Cadre_form = NULL;
+      GtkWidget *p_Cadre_result = NULL;
       GtkWidget *pVboite[3];
       GtkWidget *pHboite[9];
       GtkWidget *pEtiquette[9];
       GtkWidget *pListe[4];
       GtkWidget *pAlignement[6];
-      GtkWidget *pNum[2] ;
+      GtkWidget *pNum[2];
    // initialisation GTK
       gtk_init(&argc, &argv);
-      pFenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size(GTK_WINDOW(pFenetre), 400, 300);
-		gtk_window_set_title(GTK_WINDOW(pFenetre), "Dimensionnement Eaux pluviales");
-		g_signal_connect(G_OBJECT(pFenetre), "destroy",G_CALLBACK(gtk_main_quit), NULL);
+      p_Fenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 400);
+		gtk_window_set_title(
+      GTK_WINDOW(p_Fenetre), "Dimensionnement Eaux pluviales");
+		g_signal_connect(G_OBJECT(p_Fenetre), "destroy",G_CALLBACK(gtk_main_quit), NULL);
    // Création des cadres
-      pCadre[0] = gtk_frame_new("Paramètres");  
-      pCadre[1] = gtk_frame_new("Résultat");  
+      p_Cadre_form = gtk_frame_new("Paramètres");  
+      p_Cadre_result = gtk_frame_new("Résultat");  
 	// crée les boites
       pVboite[0] = gtk_vbox_new(FALSE,0);
       pVboite[1] = gtk_vbox_new(FALSE,0);
@@ -42,18 +53,20 @@ int main (int argc,char **argv){
 		gtk_misc_set_alignment(GTK_MISC(pEtiquette[4]), 0.0, 0.5);
 		pEtiquette[5]=gtk_label_new(" Le plus long chemin : ");
 		gtk_misc_set_alignment(GTK_MISC(pEtiquette[5]), 1.0, 0.5);
+		form.p_Resultat=gtk_label_new("Region 1");
+		gtk_misc_set_alignment(GTK_MISC(form.p_Resultat), 0.0, 0.0);
    // crée les listes
-		pListe[0] = gtk_combo_box_new_text ();
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[0]), "Region 1");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[0]), "Region 2");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[0]), "Region 3");
-      gtk_combo_box_set_active (GTK_COMBO_BOX (pListe[0]), 0);
-		pListe[1] = gtk_combo_box_new_text ();
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[1]), "10 ans");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[1]), "5 ans");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[1]), "2 ans");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[1]), "1 ans");
-      gtk_combo_box_set_active (GTK_COMBO_BOX (pListe[1]), 0);
+		form.p_Liste_reg = gtk_combo_box_new_text ();
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_reg), "Region 1");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_reg), "Region 2");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_reg), "Region 3");
+      gtk_combo_box_set_active (GTK_COMBO_BOX (form.p_Liste_reg), 0);
+		form.p_Liste_duree = gtk_combo_box_new_text ();
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "10 ans");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "5 ans");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "2 ans");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "1 ans");
+      gtk_combo_box_set_active (GTK_COMBO_BOX (form.p_Liste_duree), 0);
 		pListe[2] = gtk_combo_box_new_text ();
       gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[2]),"Espace vert");
       gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[2]),"Chaussée");
@@ -69,17 +82,17 @@ int main (int argc,char **argv){
       pAlignement[3] = gtk_alignment_new (0,1,0,0); 
       pAlignement[4] = gtk_alignment_new (0,1,0,0); 
    // Assemblage des boites
-      gtk_container_add(GTK_CONTAINER(pFenetre), pVboite[0]);
-		gtk_box_pack_start(GTK_BOX(pVboite[0]), pCadre[0], TRUE, TRUE, 0);
-      gtk_container_add(GTK_CONTAINER(pCadre[0]), pVboite[1]);
+      gtk_container_add(GTK_CONTAINER(p_Fenetre), pVboite[0]);
+		gtk_box_pack_start(GTK_BOX(pVboite[0]), p_Cadre_form, FALSE, FALSE, 0);
+      gtk_container_add(GTK_CONTAINER(p_Cadre_form), pVboite[1]);
 		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[0], FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[0]), pEtiquette[0], TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[0]), pAlignement[0], TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[0]), pListe[0]);
+		gtk_container_add(GTK_CONTAINER(pAlignement[0]), form.p_Liste_reg);
 		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[1], FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[1]), pEtiquette[1], TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[1]), pAlignement[1], TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[1]), pListe[1]);
+		gtk_container_add(GTK_CONTAINER(pAlignement[1]), form.p_Liste_duree);
 		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[2], FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[2]), pEtiquette[2], TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[2]), pAlignement[2], TRUE,TRUE, 0);
@@ -93,10 +106,15 @@ int main (int argc,char **argv){
 		gtk_box_pack_start(GTK_BOX(pHboite[4]), pEtiquette[5], TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(pHboite[4]), pAlignement[4],TRUE,TRUE, 0);
 		gtk_container_add(GTK_CONTAINER(pAlignement[4]), pNum[1]);
-		gtk_box_pack_start(GTK_BOX(pVboite[0]), pCadre[1], TRUE, TRUE, 0);
-      gtk_container_add(GTK_CONTAINER(pCadre[1]), pVboite[2]);
+		gtk_box_pack_start(GTK_BOX(pVboite[0]), p_Cadre_result, TRUE, TRUE, 0);
+      gtk_container_add(GTK_CONTAINER(p_Cadre_result), pVboite[2]);
+		gtk_box_pack_start(GTK_BOX(pVboite[2]), form.p_Resultat, TRUE,TRUE, 0);
+   // Définition des callbacks
+     g_signal_connect (
+      G_OBJECT (form.p_Liste_reg), "changed",G_CALLBACK(Calcul),&form
+      );
    // affiche la boucle évènementielle
-      gtk_widget_show_all(pFenetre);
+      gtk_widget_show_all(p_Fenetre);
       gtk_main();
    // variable
    unsigned int Region = 0;
@@ -158,3 +176,18 @@ int main (int argc,char **argv){
 	printf ("\n---------------- RESULTAT ------------------\n" );
 	printf ("le débit est de %.3f \n",Debit);*/
 }
+void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
+   gchar *p_text_1 = NULL;
+   gchar *p_text_2 = NULL;
+   gchar text[50]="";
+   donnee *recup = (donnee *) p_data;
+   p_text_1 = gtk_combo_box_get_active_text (
+      GTK_COMBO_BOX (recup->p_Liste_reg));
+   p_text_2 = gtk_combo_box_get_active_text (
+      GTK_COMBO_BOX (recup->p_Liste_duree));
+	g_strlcat (text,p_text_1,200);
+	g_strlcat (text," - ",200);
+	g_strlcat (text,p_text_2,200);
+	gtk_label_set_label(GTK_LABEL (recup->p_Resultat),text);
+   g_free(p_text_1);
+} 
