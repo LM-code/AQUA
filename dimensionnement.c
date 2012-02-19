@@ -5,6 +5,9 @@
 typedef struct {
 	GtkWidget *p_Liste_reg;
 	GtkWidget *p_Liste_duree;
+	GtkWidget *p_Liste_type;
+	GtkWidget *p_Num_surface;
+	GtkWidget *p_Num_chemin;
 	GtkWidget *p_Resultat;
 } donnee;
 
@@ -15,19 +18,23 @@ int main (int argc,char *argv[]){
       GtkWidget *p_Fenetre = NULL;
       GtkWidget *p_Cadre_form = NULL;
       GtkWidget *p_Cadre_result = NULL;
+      GtkWidget *p_Table = NULL;
       GtkWidget *pVboite[3];
       GtkWidget *pHboite[9];
       GtkWidget *pEtiquette[9];
-      GtkWidget *pListe[4];
-      GtkWidget *pAlignement[6];
-      GtkWidget *pNum[2];
+      GtkWidget *p_Alignement[6];
+      GtkWidget *p_Button;
    // initialisation GTK
       gtk_init(&argc, &argv);
       p_Fenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 400);
+      gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 300);
 		gtk_window_set_title(
       GTK_WINDOW(p_Fenetre), "Dimensionnement Eaux pluviales");
 		g_signal_connect(G_OBJECT(p_Fenetre), "destroy",G_CALLBACK(gtk_main_quit), NULL);
+   // Création des boutons
+      p_Button = gtk_button_new (); 
+   // Création du tableau
+      p_Table = gtk_table_new ( 5,3,FALSE );
    // Création des cadres
       p_Cadre_form = gtk_frame_new("Paramètres");  
       p_Cadre_result = gtk_frame_new("Résultat");  
@@ -67,51 +74,104 @@ int main (int argc,char *argv[]){
       gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "2 ans");
       gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_duree), "1 ans");
       gtk_combo_box_set_active (GTK_COMBO_BOX (form.p_Liste_duree), 0);
-		pListe[2] = gtk_combo_box_new_text ();
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[2]),"Espace vert");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[2]),"Chaussée");
-      gtk_combo_box_append_text  (GTK_COMBO_BOX (pListe[2]),"Bâtiment");
-      gtk_combo_box_set_active (GTK_COMBO_BOX (pListe[2]), 1);
+		form.p_Liste_type = gtk_combo_box_new_text ();
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_type),"Espace vert");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_type),"Chaussée");
+      gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_type),"Bâtiment");
+      gtk_combo_box_set_active (GTK_COMBO_BOX (form.p_Liste_type), 1);
    // Bouton de saisie numérique
-		pNum[0] = gtk_spin_button_new_with_range(10, 2000000, 1); 
-		pNum[1] = gtk_spin_button_new_with_range(10, 100, 1); 
+		form.p_Num_surface = gtk_spin_button_new_with_range(10,2000000, 10); 
+		form.p_Num_chemin = gtk_spin_button_new_with_range(10, 100, 1); 
    // alignement
-      pAlignement[0] = gtk_alignment_new (0,1,0,0); 
-      pAlignement[1] = gtk_alignment_new (0,1,0,0); 
-      pAlignement[2] = gtk_alignment_new (0,1,0,0); 
-      pAlignement[3] = gtk_alignment_new (0,1,0,0); 
-      pAlignement[4] = gtk_alignment_new (0,1,0,0); 
+      p_Alignement[0] = gtk_alignment_new (0,0,0,0); 
+      p_Alignement[1] = gtk_alignment_new (0,0,0,0); 
+      p_Alignement[2] = gtk_alignment_new (0,0,0,0); 
+      p_Alignement[3] = gtk_alignment_new (0,0,0,0); 
+      p_Alignement[4] = gtk_alignment_new (0,0,0,0); 
    // Assemblage des boites
       gtk_container_add(GTK_CONTAINER(p_Fenetre), pVboite[0]);
 		gtk_box_pack_start(GTK_BOX(pVboite[0]), p_Cadre_form, FALSE, FALSE, 0);
-      gtk_container_add(GTK_CONTAINER(p_Cadre_form), pVboite[1]);
-		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[0], FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[0]), pEtiquette[0], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[0]), pAlignement[0], TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[0]), form.p_Liste_reg);
-		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[1], FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[1]), pEtiquette[1], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[1]), pAlignement[1], TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[1]), form.p_Liste_duree);
-		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[2], FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[2]), pEtiquette[2], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[2]), pAlignement[2], TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[2]), pListe[2]);
-		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[3], FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[3]), pEtiquette[3], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[3]), pAlignement[3],FALSE,FALSE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[3]), pNum[0]);
-		gtk_box_pack_start(GTK_BOX(pHboite[3]), pEtiquette[4], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pVboite[1]), pHboite[4], FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[4]), pEtiquette[5], TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(pHboite[4]), pAlignement[4],TRUE,TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(pAlignement[4]), pNum[1]);
+      gtk_container_add(GTK_CONTAINER(p_Cadre_form), p_Table );
+      // 1 ère ligne du tableau
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[0],
+        0, 1, 0, 1,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[0],
+        1, 2, 0, 1,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_container_add(GTK_CONTAINER(p_Alignement[0]), form.p_Liste_reg );
+      gtk_widget_set_size_request(form.p_Liste_reg, 120, 28);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Button,
+        2, 3, 0, 1,
+        GTK_EXPAND, GTK_EXPAND,
+        0, 0);
+      gtk_widget_set_size_request(p_Button, 28, 28);
+      // 2 ème ligne du tableau
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[1],
+        0, 1, 1, 2,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[1],
+        1, 2, 1, 2,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_container_add(GTK_CONTAINER(p_Alignement[1]), form.p_Liste_duree );
+      gtk_widget_set_size_request(form.p_Liste_duree, 120, 28);
+      // 3 ème ligne du tableau
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[2],
+        0, 1, 2, 3,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[2],
+        1, 2, 2, 3,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_container_add(GTK_CONTAINER(p_Alignement[2]), form.p_Liste_type );
+      gtk_widget_set_size_request(form.p_Liste_type, 120, 28);
+      // 4 ème ligne du tableau
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[3],
+        0, 1, 3, 4,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[3],
+        1, 2, 3, 4,
+        GTK_EXPAND, GTK_EXPAND,
+        0, 0);
+      gtk_container_add(GTK_CONTAINER(p_Alignement[3]),form.p_Num_surface );
+      gtk_widget_set_size_request(form.p_Num_surface, 120, 28);
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[4],
+        2, 3, 3, 4,
+        GTK_EXPAND, GTK_EXPAND,
+        0, 0);
+      // 5 ème ligne du tableau
+      gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[5],
+        0, 1, 4, 5,
+        GTK_FILL, GTK_EXPAND,
+        0, 0);
+      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[4],
+        1, 2, 4, 5,
+        GTK_EXPAND, GTK_EXPAND,
+        0, 0);
+      gtk_container_add(GTK_CONTAINER(p_Alignement[4]),form.p_Num_chemin );
+      gtk_widget_set_size_request(form.p_Num_chemin, 120, 28);
+      /*gtk_table_attach(GTK_TABLE(p_Table), pEtiquette[4],
+        2, 3, 4, 5,
+        GTK_EXPAND, GTK_EXPAND,
+        0, 0);*/
 		gtk_box_pack_start(GTK_BOX(pVboite[0]), p_Cadre_result, TRUE, TRUE, 0);
       gtk_container_add(GTK_CONTAINER(p_Cadre_result), pVboite[2]);
 		gtk_box_pack_start(GTK_BOX(pVboite[2]), form.p_Resultat, TRUE,TRUE, 0);
    // Définition des callbacks
      g_signal_connect (
       G_OBJECT (form.p_Liste_reg), "changed",G_CALLBACK(Calcul),&form
+      );
+     g_signal_connect (
+      G_OBJECT (form.p_Liste_duree), "changed",G_CALLBACK(Calcul),&form
+      );
+     g_signal_connect (
+      G_OBJECT (form.p_Liste_type), "changed",G_CALLBACK(Calcul),&form
       );
    // affiche la boucle évènementielle
       gtk_widget_show_all(p_Fenetre);
@@ -123,19 +183,6 @@ int main (int argc,char *argv[]){
    unsigned int Chemin_exutoire = 0;
    float Pente = 0.01;
    double Debit = 0, Puis_1 = 0, Puis_2 = 0, Puis_3 = 0;
-   // tableau région des pluies selon la formule de caquot
-	const float Tab_caquot [8][12] = 
-   	{{1,1,1,1,2,2,2,2,3,3,3,3}
-      ,{10,5,2,1,10,5,2,1,10,5,2,1}
-      ,{5.9,5,3.7,3.1,6.7,5.5,4.6,3.5,6.1,5.9,5,3.8}
-      ,{-0.59,-0.61,-0.62,-0.64,-0.55,-0.57,-0.62,-0.62,-0.44,-0.51,-0.54,-0.53}
-      ,{1.43,1.192,0.834,0.682,1.601,1.209,1.087,0.78,1.296,1.327,1.121,0.804}
-      ,{0.29,0.3,0.31,0.32,0.27,0.28,0.31,0.31,0.21,0.24,0.2,0.26}
-      ,{1.2,1.21,1.22,1.28,1.19,1.2,1.22,1.22,1.14,1.17,1.18,1.18}
-      ,{0.78,0.78,0.77,0.77,0.8,0.79,0.77,0.77,0.83,0.81,0.8,0.8}};
-   // Coefficient de ruissellement
-	const float C_strickler [4] = {1,0.9,0.7,0.3} ;
-   // région de pluie Int77
    /*while ( Region <= 0 || Region >= 4){
 	   system("clear");
 	   printf ("Entrez votre région ( 1-2-3 ) : ");
@@ -179,15 +226,21 @@ int main (int argc,char *argv[]){
 void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
    gchar *p_text_1 = NULL;
    gchar *p_text_2 = NULL;
+   gchar *p_text_3 = NULL;
    gchar text[50]="";
    donnee *recup = (donnee *) p_data;
    p_text_1 = gtk_combo_box_get_active_text (
       GTK_COMBO_BOX (recup->p_Liste_reg));
    p_text_2 = gtk_combo_box_get_active_text (
       GTK_COMBO_BOX (recup->p_Liste_duree));
+   p_text_3 = gtk_combo_box_get_active_text (
+      GTK_COMBO_BOX (recup->p_Liste_type));
 	g_strlcat (text,p_text_1,200);
 	g_strlcat (text," - ",200);
 	g_strlcat (text,p_text_2,200);
+	g_strlcat (text," - ",200);
+	g_strlcat (text,p_text_3,200);
 	gtk_label_set_label(GTK_LABEL (recup->p_Resultat),text);
    g_free(p_text_1);
+   g_free(p_text_2);
 } 
