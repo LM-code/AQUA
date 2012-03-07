@@ -1,6 +1,6 @@
 #ifndef FORMULE_H
 #define FORMULE_H
 
-extern Debit_int_77();
+void Calcul (GtkWidget *p_Fenetre,gpointer p_data);
 
 #endif
