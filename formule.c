@@ -2,19 +2,21 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include "formule.h"
+
 void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
    // Variable pour récupérer les données du formulaire 
    donnee *recup = (donnee *) p_data;
    const gchar *p_text_1 = NULL;
    const gchar *p_text_2 = NULL;
    const gchar *p_text_3 = NULL;
+   const gchar *p_text_4 = NULL;
    const gchar *p_text_10 = NULL;
    gchar text[80]="";
    gint Region_num = 0;
    gint Duree_num = 0;
    // Variable de calcul pour le débit 
    gint Chemin = 0, a = 0, x = 0;
-   gfloat Surface =0, Debit = 0, Pente = 0.005;
+   gfloat Surface =0, Debit = 0, Pente = 0;
    gfloat Puis_1 = 0, Puis_2 = 0, Puis_3 = 0;
 	// région de pluie Int77
 	// tableau région des pluies selon la formule de caquot
@@ -40,6 +42,8 @@ void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
       GTK_SPIN_BUTTON (recup->p_Num_surface));
    Chemin = gtk_spin_button_get_value (
       GTK_SPIN_BUTTON (recup->p_Num_chemin));
+   Pente = gtk_spin_button_get_value (
+      GTK_SPIN_BUTTON (recup->p_Num_pente));
 	g_strlcat (text,p_text_1,200);
 	g_strlcat (text," - ",200);
 	g_strlcat (text,p_text_2,200);
@@ -59,14 +63,30 @@ void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
    if (strcmp(p_text_3,"Bâtiment") == 0 ) {
       a=0;
    }
+	// Conversion de la variable pente de mm en m
+   Pente = Pente/100;
+	// Calcul la colonne du tableau de caquot
    x = ( 4 * Region_num ) - 1 - sqrt ( Duree_num - 1); 
-	// calcul le débit
+	/* calcul le débit
+   Variable :
+   ----------
+   a     : tableau caquot
+   b     : tableau caquot
+   Kbéta : 0,5 ^ b x a / 6,6
+   Alpha : 0,287 x b + 1
+   Béta  : 0,41 x b
+   Gamma : 0,95 + 0,507 x b
+
+   formule débit brute de l'orage int 77-284 :
+   ----------------------------------------------
+   Q = Kbéta x (Pente moy Bas ^ Alpha) x (coef ruis ^ Béta) x (Aire ^ Gamma)
+   
+   */
    Puis_1 = pow(Pente,Tab_caquot[5][x]); 
    Puis_2 = pow(C_strickler[a],Tab_caquot[6][x]); 
    Puis_3 = pow((Surface/10000),Tab_caquot[7][x]); 
-	Debit = Tab_caquot[4][x]*Puis_1*Puis_2*Puis_3;
-   //g_printf("%.2f",Tab_caquot[5][0]);
-   p_text_10 = g_strdup_printf("\nDébit = %.4f m3/s",Debit);
+	Debit = (Tab_caquot[4][x]*Puis_1*Puis_2*Puis_3)*1000;
+   p_text_10 = g_strdup_printf("%.0f",Debit);
 	g_strlcat (text,p_text_10,200);
-	gtk_label_set_label(GTK_LABEL (recup->p_Resultat),text);
+	gtk_entry_set_text(GTK_ENTRY (recup->p_Resultat),p_text_10);
 }

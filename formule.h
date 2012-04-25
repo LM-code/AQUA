@@ -7,6 +7,7 @@ typedef struct {
 	GtkWidget *p_Liste_type;
 	GtkWidget *p_Num_surface;
 	GtkWidget *p_Num_chemin;
+	GtkWidget *p_Num_pente;
 	GtkWidget *p_Resultat;
 } donnee;
 
