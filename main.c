@@ -4,6 +4,7 @@
 # include <gtk/gtk.h>
 # include "formule.h"
 # include "map.h"
+# include "fonction.h"
 
 int main (int argc,char *argv[]){
       gtk_init(&argc, &argv);
@@ -12,22 +13,22 @@ int main (int argc,char *argv[]){
       GtkWidget *p_Fenetre = NULL;
       GtkWidget *p_Table = NULL;
       GtkWidget *p_Table_1 = NULL;
-      GtkWidget *p_Vboite[1] = {NULL};
+      GtkWidget *p_Vboite[1] = {};
+      GtkWidget *p_Hboite[1] = {};
       GtkWidget *p_Titre_1 = NULL;
       GtkWidget *p_Titre_2 = NULL;
-      GtkWidget *p_Etiquette[9] =
-         {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
-      GtkWidget *p_Alignement[9] =
-         {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+      GtkWidget *p_Etiquette[9] = {};
+      GtkWidget *p_Alignement[9] = {};
       GtkWidget *p_Groupe = NULL;
       GtkWidget *p_Button = NULL;
       GtkWidget *p_Button_image = NULL;
       GtkWidget *p_Ligne_separation = NULL;
-      GtkWidget *p_Bouton_type = NULL;
       gchar *p_text_titre = NULL;
    // initialisation GTK
       p_Fenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 300);
+      gtk_window_set_icon_from_file(GTK_WINDOW(p_Fenetre),
+         "image/Logo_mini.png",NULL);
 		gtk_window_set_title(
       GTK_WINDOW(p_Fenetre), " Dimensionnement Eaux pluviales ");
    // Création de la ligne de séparation
@@ -37,7 +38,7 @@ int main (int argc,char *argv[]){
       p_Button_image = gtk_image_new_from_file
           ("image/carte_france_mini.png");
       gtk_button_set_image(GTK_BUTTON(p_Button), p_Button_image);
-      p_Bouton_type = gtk_button_new_with_label (" l/s "); 
+      form.p_Unite = gtk_button_new_with_label ("L/S"); 
    // Création des entrées texte
       form.p_Nom_bassin = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY(form.p_Nom_bassin),"Bassin EP 01");
@@ -51,6 +52,7 @@ int main (int argc,char *argv[]){
 		p_Table_1 = gtk_table_new ( 2,3,FALSE );
 	// Création des boites
       p_Vboite[0] = gtk_vbox_new(FALSE,0);
+      p_Hboite[0] = gtk_hbox_new(FALSE,0);
 	// Création du groupe caché
 		p_Groupe = gtk_expander_new_with_mnemonic 
           ("cliquez ici pour + de paramètres");
@@ -226,22 +228,13 @@ int main (int argc,char *argv[]){
         GTK_FILL, GTK_EXPAND,
         0, 2);
       gtk_container_add(GTK_CONTAINER(p_Alignement[6]), p_Titre_2 );
-      // 10 ème ligne du tableau
-      gtk_table_attach(GTK_TABLE(p_Table), p_Etiquette[8],
-        0, 1, 10, 11,
-        GTK_FILL, GTK_EXPAND,
-        0, 2);
-      gtk_table_attach(GTK_TABLE(p_Table), p_Alignement[7],
-        1, 2, 10, 11,
-        GTK_FILL, GTK_FILL,
-        0, 2);
-      gtk_table_attach(GTK_TABLE(p_Table), p_Bouton_type,
-        2, 3, 10, 11,
-        GTK_EXPAND, GTK_EXPAND,
-        0, 2);
-      gtk_container_add(GTK_CONTAINER(p_Alignement[7]),form.p_Resultat );
+      // Boite Horizontale
+		gtk_box_pack_start(GTK_BOX(p_Vboite[0]), p_Hboite[0], FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), p_Etiquette[8], FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Resultat, FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Unite, FALSE, FALSE, 5);
       gtk_widget_set_size_request(form.p_Resultat, 50, 28);
-      gtk_widget_set_size_request(p_Bouton_type, 30, 28);
+      gtk_widget_set_size_request(form.p_Unite, 50, 28);
    // Définition des callbacks
      g_signal_connect (
       G_OBJECT (form.p_Liste_reg), "changed",G_CALLBACK(Calcul),&form
@@ -260,6 +253,10 @@ int main (int argc,char *argv[]){
       );
 		g_signal_connect(
       G_OBJECT(p_Button), "clicked",G_CALLBACK(carte_france), NULL
+      );
+     g_signal_connect (
+        G_OBJECT (form.p_Unite),"clicked",G_CALLBACK(switch_unite),
+        (gpointer)form.p_Resultat
       );
    // affiche la boucle évènementielle
       gtk_widget_show_all(p_Fenetre);

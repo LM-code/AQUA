@@ -10,6 +10,7 @@ void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
    const gchar *p_text_2 = NULL;
    const gchar *p_text_3 = NULL;
    const gchar *p_text_4 = NULL;
+   const gchar *p_text_5 = NULL;
    const gchar *p_text_10 = NULL;
    gchar text[80]="";
    gint Region_num = 0;
@@ -38,6 +39,7 @@ void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
       GTK_COMBO_BOX (recup->p_Liste_duree));
    p_text_3 = gtk_combo_box_get_active_text (
       GTK_COMBO_BOX (recup->p_Liste_type));
+   p_text_4 = gtk_button_get_label(GTK_BUTTON(recup->p_Unite));
    Surface = gtk_spin_button_get_value (
       GTK_SPIN_BUTTON (recup->p_Num_surface));
    Chemin = gtk_spin_button_get_value (
@@ -85,8 +87,13 @@ void Calcul (GtkWidget *p_Fenetre,gpointer p_data){
    Puis_1 = pow(Pente,Tab_caquot[5][x]); 
    Puis_2 = pow(C_strickler[a],Tab_caquot[6][x]); 
    Puis_3 = pow((Surface/10000),Tab_caquot[7][x]); 
-	Debit = (Tab_caquot[4][x]*Puis_1*Puis_2*Puis_3)*1000;
-   p_text_10 = g_strdup_printf("%.0f",Debit);
+	   Debit = (Tab_caquot[4][x]*Puis_1*Puis_2*Puis_3)*1000;
+   if (strcmp(p_text_4,"L/S") == 0){
+		p_text_10 = g_strdup_printf("%.0f",Debit);
+   }
+   if (strcmp(p_text_4,"M3/S") == 0){
+		p_text_10 = g_strdup_printf("%.3f",Debit/1000);
+   }
 	g_strlcat (text,p_text_10,200);
 	gtk_entry_set_text(GTK_ENTRY (recup->p_Resultat),p_text_10);
 }

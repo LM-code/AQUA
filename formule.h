@@ -9,6 +9,7 @@ typedef struct {
 	GtkWidget *p_Num_chemin;
 	GtkWidget *p_Num_pente;
 	GtkWidget *p_Resultat;
+   GtkWidget *p_Unite;
 } donnee;
 
 extern void Calcul (GtkWidget *p_Fenetre,gpointer p_data);
