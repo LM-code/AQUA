@@ -14,10 +14,10 @@ int main (int argc,char *argv[]){
       GtkWidget *p_Table = NULL;
       GtkWidget *p_Table_1 = NULL;
       GtkWidget *p_Vboite[1] = {};
-      GtkWidget *p_Hboite[1] = {};
+      GtkWidget *p_Hboite[2] = {};
       GtkWidget *p_Titre_1 = NULL;
       GtkWidget *p_Titre_2 = NULL;
-      GtkWidget *p_Etiquette[9] = {};
+      GtkWidget *p_Etiquette[10] = {};
       GtkWidget *p_Alignement[9] = {};
       GtkWidget *p_Groupe = NULL;
       GtkWidget *p_Button = NULL;
@@ -26,11 +26,12 @@ int main (int argc,char *argv[]){
       gchar *p_text_titre = NULL;
    // initialisation GTK
       p_Fenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 300);
       gtk_window_set_icon_from_file(GTK_WINDOW(p_Fenetre),
          "image/Logo_mini.png",NULL);
 		gtk_window_set_title(
       GTK_WINDOW(p_Fenetre), " Dimensionnement Eaux pluviales ");
+      gtk_window_set_resizable(GTK_WINDOW(p_Fenetre),0);
+      //gtk_window_set_default_size(GTK_WINDOW(p_Fenetre), 350, 300);
    // Création de la ligne de séparation
       p_Ligne_separation = gtk_hseparator_new ();
    // Création des boutons
@@ -39,20 +40,26 @@ int main (int argc,char *argv[]){
           ("image/carte_france_mini.png");
       gtk_button_set_image(GTK_BUTTON(p_Button), p_Button_image);
       form.p_Unite = gtk_button_new_with_label ("L/S"); 
+      form.p_Unite_2 = gtk_button_new_with_label ("L/S"); 
    // Création des entrées texte
       form.p_Nom_bassin = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY(form.p_Nom_bassin),"Bassin EP 01");
 		gtk_entry_set_position (GTK_ENTRY(form.p_Nom_bassin),5);
       form.p_Resultat = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY(form.p_Resultat),"XXXX");
+      gtk_entry_set_text (GTK_ENTRY(form.p_Resultat),"0");
       gtk_entry_set_editable (GTK_ENTRY(form.p_Resultat),FALSE);
 		gtk_entry_set_alignment (GTK_ENTRY(form.p_Resultat),1);
+      form.p_Resultat_2 = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY(form.p_Resultat_2),"0");
+      gtk_entry_set_editable (GTK_ENTRY(form.p_Resultat_2),FALSE);
+		gtk_entry_set_alignment (GTK_ENTRY(form.p_Resultat_2),1);
    // Création du tableau
       p_Table = gtk_table_new ( 11,3,FALSE );
 		p_Table_1 = gtk_table_new ( 2,3,FALSE );
 	// Création des boites
-      p_Vboite[0] = gtk_vbox_new(FALSE,0);
-      p_Hboite[0] = gtk_hbox_new(FALSE,0);
+      p_Vboite[0] = gtk_vbox_new(FALSE,5);
+      p_Hboite[0] = gtk_hbox_new(FALSE,5);
+      p_Hboite[1] = gtk_hbox_new(FALSE,5);
 	// Création du groupe caché
 		p_Groupe = gtk_expander_new_with_mnemonic 
           ("cliquez ici pour + de paramètres");
@@ -63,7 +70,7 @@ int main (int argc,char *argv[]){
 		gtk_label_set_use_markup(GTK_LABEL(p_Titre_1), TRUE);
 		gtk_misc_set_alignment(GTK_MISC(p_Titre_1), 0.0, 1.0);
       g_free(p_text_titre);
-		p_Etiquette[0]=gtk_label_new("Nom du bassin : ");
+		p_Etiquette[0]=gtk_label_new("Nom bassin versant : ");
 		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[0]), 1.0, 0.5);
 		p_Etiquette[1]=gtk_label_new("Région : ");
 		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[1]), 1.0, 0.5);
@@ -73,8 +80,8 @@ int main (int argc,char *argv[]){
 		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[3]), 1.0, 0.5);
 		p_Etiquette[4]=gtk_label_new("Surface Bassin versant : ");
 		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[4]), 1.0, 0.5);
-		p_Etiquette[5]=gtk_label_new(" Mètre(s)");
-		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[5]), 0.0, 0.5);
+		p_Etiquette[5]=gtk_label_new(" M2 ");
+		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[5]), 0.5, 0.0);
 		p_Etiquette[6]=gtk_label_new("Le plus long chemin : ");
 		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[6]), 1.0, 0.5);
 		p_Etiquette[7]=gtk_label_new("La pente du bassin : ");
@@ -83,9 +90,11 @@ int main (int argc,char *argv[]){
          ("<u><b>RESULTAT :</b></u>", -1, NULL, NULL, NULL);
 		p_Titre_2 = gtk_label_new(p_text_titre);
 		gtk_label_set_use_markup(GTK_LABEL(p_Titre_2), TRUE);
-		p_Etiquette[8]=gtk_label_new("Débit du bassin versant : ");
-		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[8]), 1.0, 0.5);
+		p_Etiquette[8]=gtk_label_new("Débit d'orage brute : ");
       g_free(p_text_titre);
+		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[8]), 1.0, 0.5);
+		p_Etiquette[9]=gtk_label_new("Débit d'orage corrigé : ");
+		gtk_misc_set_alignment(GTK_MISC(p_Etiquette[9]), 1.0, 0.5);
    // Création des listes déroulantes
 		form.p_Liste_reg = gtk_combo_box_new_text ();
       gtk_combo_box_append_text  (GTK_COMBO_BOX (form.p_Liste_reg), "Region 1");
@@ -119,7 +128,7 @@ int main (int argc,char *argv[]){
       p_Alignement[8] = gtk_alignment_new (0,0.5,0,0); 
    // Assemblage des boites
       gtk_container_add(GTK_CONTAINER(p_Fenetre), p_Vboite[0]);
-		gtk_box_pack_start(GTK_BOX(p_Vboite[0]), p_Table, FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Vboite[0]), p_Table, FALSE,FALSE,5);
       // 1 ère ligne du tableau : TITRE
       gtk_table_attach(GTK_TABLE(p_Table), p_Titre_1,
         0, 1, 0, 1,
@@ -150,7 +159,7 @@ int main (int argc,char *argv[]){
         2, 3, 2, 3,
         GTK_EXPAND, GTK_EXPAND,
         0, 2);
-      gtk_widget_set_size_request(p_Button, 28, 28);
+      gtk_widget_set_size_request(p_Button, 40, 28);
       // 4 ème ligne du tableau
       gtk_table_attach(GTK_TABLE(p_Table), p_Etiquette[2],
         0, 1, 3, 4,
@@ -228,13 +237,21 @@ int main (int argc,char *argv[]){
         GTK_FILL, GTK_EXPAND,
         0, 2);
       gtk_container_add(GTK_CONTAINER(p_Alignement[6]), p_Titre_2 );
-      // Boite Horizontale
+      // Boite Horizontale pour le débit de l'orage brute
 		gtk_box_pack_start(GTK_BOX(p_Vboite[0]), p_Hboite[0], FALSE, FALSE, 5);
-		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), p_Etiquette[8], FALSE, FALSE, 5);
-		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Resultat, FALSE, FALSE, 5);
-		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Unite, FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), p_Etiquette[8], FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Resultat, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[0]), form.p_Unite, FALSE, FALSE, 0);
       gtk_widget_set_size_request(form.p_Resultat, 50, 28);
       gtk_widget_set_size_request(form.p_Unite, 50, 28);
+      // Boite Horizontale pour le débit de l'orage corrigé
+		gtk_box_pack_start(GTK_BOX(p_Vboite[0]), p_Hboite[1], FALSE, FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[1]), p_Etiquette[9], FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[1]), 
+         form.p_Resultat_2, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(p_Hboite[1]), form.p_Unite_2, FALSE, FALSE, 0);
+      gtk_widget_set_size_request(form.p_Resultat_2, 50, 28);
+      gtk_widget_set_size_request(form.p_Unite_2, 50, 28);
    // Définition des callbacks
      g_signal_connect (
       G_OBJECT (form.p_Liste_reg), "changed",G_CALLBACK(Calcul),&form
@@ -257,6 +274,10 @@ int main (int argc,char *argv[]){
      g_signal_connect (
         G_OBJECT (form.p_Unite),"clicked",G_CALLBACK(switch_unite),
         (gpointer)form.p_Resultat
+      );
+     g_signal_connect (
+        G_OBJECT (form.p_Unite_2),"clicked",G_CALLBACK(switch_unite),
+        (gpointer)form.p_Resultat_2
       );
    // affiche la boucle évènementielle
       gtk_widget_show_all(p_Fenetre);
