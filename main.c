@@ -115,7 +115,9 @@ int main (int argc,char *argv[]){
    // Création des des boutons de saisie numérique
 		form.p_Num_surface = gtk_spin_button_new_with_range(10,2000000, 10); 
 		form.p_Num_chemin = gtk_spin_button_new_with_range(10, 500, 1); 
+		gtk_spin_button_set_value( GTK_SPIN_BUTTON (form.p_Num_chemin), 50);
 		form.p_Num_pente = gtk_spin_button_new_with_range(0.1, 5, .1); 
+		gtk_spin_button_set_value( GTK_SPIN_BUTTON (form.p_Num_pente),1);
    // alignement
       p_Alignement[0] = gtk_alignment_new (0,0,0,0); 
       p_Alignement[1] = gtk_alignment_new (0,0,0,0); 
@@ -254,31 +256,47 @@ int main (int argc,char *argv[]){
       gtk_widget_set_size_request(form.p_Unite_2, 50, 28);
    // Définition des callbacks
      g_signal_connect (
-      G_OBJECT (form.p_Liste_reg), "changed",G_CALLBACK(Calcul),&form
-      );
+        G_OBJECT (form.p_Liste_reg), 
+        "changed",G_CALLBACK(Calcul),&form
+        );
      g_signal_connect (
-      G_OBJECT (form.p_Liste_duree), "changed",G_CALLBACK(Calcul),&form
-      );
+        G_OBJECT (form.p_Liste_duree),
+        "changed",G_CALLBACK(Calcul),&form
+        );
      g_signal_connect (
-      G_OBJECT (form.p_Liste_type), "changed",G_CALLBACK(Calcul),&form
-      );
+        G_OBJECT (form.p_Liste_type),
+        "changed",G_CALLBACK(Calcul),&form
+        );
      g_signal_connect (
-      G_OBJECT (form.p_Num_surface), "value_changed",G_CALLBACK(Calcul),&form
-      );
-		g_signal_connect(
-      G_OBJECT(p_Fenetre), "destroy",G_CALLBACK(gtk_main_quit), NULL
-      );
-		g_signal_connect(
-      G_OBJECT(p_Button), "clicked",G_CALLBACK(carte_france), NULL
-      );
+        G_OBJECT (form.p_Num_surface),
+        "value_changed",G_CALLBACK(Calcul),&form
+        );
      g_signal_connect (
-        G_OBJECT (form.p_Unite),"clicked",G_CALLBACK(switch_unite),
+        G_OBJECT (form.p_Num_chemin),
+        "value_changed",G_CALLBACK(Calcul),&form
+        );
+     g_signal_connect (
+        G_OBJECT (form.p_Num_pente),
+        "value_changed",G_CALLBACK(Calcul),&form
+        );
+	  g_signal_connect(
+        G_OBJECT(p_Fenetre), "destroy",
+        G_CALLBACK(gtk_main_quit), NULL
+        );
+	  g_signal_connect(
+        G_OBJECT(p_Button), "clicked",
+        G_CALLBACK(carte_france), NULL
+        );
+     g_signal_connect (
+        G_OBJECT (form.p_Unite),
+        "clicked",G_CALLBACK(switch_unite),
         (gpointer)form.p_Resultat
-      );
+        );
      g_signal_connect (
-        G_OBJECT (form.p_Unite_2),"clicked",G_CALLBACK(switch_unite),
+        G_OBJECT (form.p_Unite_2),
+        "clicked",G_CALLBACK(switch_unite),
         (gpointer)form.p_Resultat_2
-      );
+        );
    // affiche la boucle évènementielle
       gtk_widget_show_all(p_Fenetre);
       gtk_main();
