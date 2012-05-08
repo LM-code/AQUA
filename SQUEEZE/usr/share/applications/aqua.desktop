@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Aqua
+Comment=rainwater sewer system
+Comment[fr]=réseau d'eaux pluviales 
+Exec=Aqua
+Icon=aqua.png
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Education;Science

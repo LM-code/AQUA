@@ -1,0 +1,9 @@
+Package: Aqua
+Source: Aqua
+Version: 0.9.0.1
+Section: base
+Priority: optional
+Architecture: all
+Depends: libglib2.0-0, libx11-data, librsvg2-common, fontconfig-config, ttf-dejavu-core, libglib2.0-data, libxdamage1, fontconfig, zlib1g, libxdmcp6, libxfixes3, libcairo2, libxcb-render-util0, locales, dmz-cursor-theme, libxi6, libfreetype6, libpng12-0, cups, libatk1.0-0, libxcursor1, libgtk2.0-0, libpixman-1-0, libwmf0.2-7, gtk2-engines, libxrender1, libxcb1, libc6-i686, libpango1.0-0, libgtk2.0-common, libxrandr2, libfontconfig1, libc6, libxext6, libselinux1, libxcb-render0, libexpat1, ttf-wqy-zenhei, libxinerama1, libxau6, libpcre3, libx11-6, libxcomposite1
+Maintainer: Meurillon Laurent <webmaster@super-annonce.fr>
+Description: Rainwater sewer system 
