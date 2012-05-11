@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Aqua"
-#define MyAppVersion "1.0"
+#define MyAppVersion "0.9.0.2"
 #define MyAppPublisher "Laurent MEURILLON"
 #define MyAppExeName "aqua.exe"
 

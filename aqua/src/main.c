@@ -6,6 +6,8 @@
 # include "map.h"
 # include "fonction.h"
 
+# define path_image "/usr/local/share/aqua/image/"
+
 int main (int argc,char *argv[]){
       gtk_init(&argc, &argv);
       donnee form = {};
@@ -27,7 +29,7 @@ int main (int argc,char *argv[]){
    // initialisation GTK
       p_Fenetre = gtk_window_new(GTK_WINDOW_TOPLEVEL);
       gtk_window_set_icon_from_file(GTK_WINDOW(p_Fenetre),
-         "/usr/local/share/aqua/image/carte_france.png",NULL);
+      path_image"Logo_mini.png",NULL);
 		gtk_window_set_title(
       GTK_WINDOW(p_Fenetre), " Dimensionnement Eaux pluviales ");
       gtk_window_set_resizable(GTK_WINDOW(p_Fenetre),0);
@@ -37,7 +39,7 @@ int main (int argc,char *argv[]){
    // Création des boutons
       p_Button = gtk_button_new (); 
       p_Button_image = gtk_image_new_from_file
-          ("/usr/local/share/aqua/image/carte_france_mini.png");
+          (path_image"carte_france_mini.png");
       gtk_button_set_image(GTK_BUTTON(p_Button), p_Button_image);
       form.p_Unite = gtk_button_new_with_label ("L/S"); 
       form.p_Unite_2 = gtk_button_new_with_label ("L/S"); 
